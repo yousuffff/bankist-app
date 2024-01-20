@@ -78,6 +78,31 @@ const displayMovements = function (movements) {
 
 }
 displayMovements(account1.movements);
+
+const calcDisplayBalance = function(movements){
+  const balance = movements.reduce(function(acc, move ){
+     return acc + move
+    }, 0 // zero is a initial value of acculator
+  );
+  console.log(balance);
+  labelBalance.textContent = `${balance} €`;
+
+}
+calcDisplayBalance(account1.movements);
+
+const createUserName = function(accounts){
+  accounts.forEach(function(acc){
+    acc.username = acc.owner
+                .toLowerCase()
+                .split(' ')
+                .map(word => word[0]) // map method use
+            // .map(function(word){ return word[0]}) same as above but lengthy
+                .join('');
+  })
+}
+createUserName(accounts);
+console.log(accounts);
+
 /////////////////////////////////////////////////
 /////////////////////////////////////////////////
 // LECTURES
@@ -202,3 +227,36 @@ const chheckDog = function(arr){
   })
 }
 chheckDog(Dogs);*/
+
+/*
+/////////////////// map method in array///////////////////////////
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const euroToUsd = 1.1;
+
+//with arrow function
+const movementsUSD = movements.map(move => Math.trunc(move * euroToUsd));
+
+// with normal function
+// const movementsUSD = movements.map(function (move) {
+//   return Math.trunc(move * euroToUsd)
+// });
+console.log(movementsUSD);*/
+
+///////////filter methods////////
+const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+/*
+const withdrawal = movements.filter( move => move < 0);
+console.log(withdrawal);*/
+
+
+/////////////// reduce method ///////////////////////////////
+
+const balance = movements.reduce( (acc, move) => acc + move , 0)
+console.log(balance);
+
+const largest = movements.reduce(function (acc, move){
+  if(acc > move) return acc;
+  else return move;
+}, movements[0]);
+console.log(largest);
+//
