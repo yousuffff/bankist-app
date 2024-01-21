@@ -307,14 +307,18 @@ const calcAverageHumanAge = function(dogs){
   const adult =  filterd.reduce(function(acculator , dog , i , arr){
      return acculator + dog / arr.length
 },0)
-  console.log(adult);
-  
-  // const age = dogToHuman.filter(dog => {
-  //    return dog >=18;
-  // })
-  
-  // console.log(age );
-  
+  console.log(dogToHuman);
 }
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
 // calcAverageHumanAge([16, 6, 10, 5, 6, 1, 4]);
+
+///// Challenge 3 //////////
+// using chaining method
+
+const calcAverageHuman = function(dogs){
+  const dogToHuman = dogs.map(dog => dog <= 2 ? 2 * dog : 16 + dog * 4).filter(dog => dog >=18).reduce( (acculator , dog , i , arr)=> acculator + dog / arr.length, 0);
+  console.log(dogToHuman);
+
+}
+// calcAverageHuman([5, 2, 4, 1, 15, 8, 3]);
+// calcAverageHuman([16, 6, 10, 5, 6, 1, 4]);
