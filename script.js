@@ -32,8 +32,20 @@ const account4 = {
   interestRate: 1,
   pin: 4444,
 };
+const account5 = {
+  owner: 'Yousuf Mohd',
+  movements: [4300, 10000, -700, 950, 90, -20, 50, 400, -460],
+  interestRate: 1,
+  pin: 9794,
+};
+const account6 = {
+  owner: 'Hashim Haidar',
+  movements: [4300, -10000, -700, 950, 90, -20, 50, 400, -460],
+  interestRate: 1,
+  pin: 9211,
+};
 
-const accounts = [account1, account2, account3, account4];
+const accounts = [account1, account2, account3, account4, account5, account6,];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -77,46 +89,71 @@ const displayMovements = function (movements) {
   })
 
 }
-displayMovements(account1.movements);
 
-const calcDisplayBalance = function(movements){
-  const balance = movements.reduce(function(acc, move ){
-     return acc + move
-    }, 0 // zero is a initial value of acculator
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce(function (acc, move) {
+    return acc + move
+  }, 0 // zero is a initial value of acculator
   );
   // console.log(balance);
   labelBalance.textContent = `${balance} €`;
 
 }
-calcDisplayBalance(account1.movements);
 
-const calcDisplaySummary = function(movements){
-  const income = movements.filter(move => move > 0).reduce((acc, move) => acc + move, 0);
+const calcDisplaySummary = function (acc) {
+  const income = acc.movements.filter(move => move > 0).reduce((acc, move) => acc + move, 0);
   labelSumIn.textContent = `${income}€`;
 
-  const outcome = movements.filter(move => move < 0).reduce((acc, move) => acc + move, 0);
-  labelSumOut.textContent = `${Math.abs( outcome)}€`;
+  const outcome = acc.movements.filter(move => move < 0).reduce((acc, move) => acc + move, 0);
+  labelSumOut.textContent = `${Math.abs(outcome)}€`;
 
-  const calcInterest = movements.filter(move => move > 0)
-                      .map( deposit => deposit * 1.2/100)
-                      .filter(int => int >= 1 )  // bcoz bank change rule and interest less than 1 is not accountable.
-                      .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${ calcInterest}€`;
+  const calcInterest = acc.movements.filter(move => move > 0)
+    .map(deposit => deposit * acc.interestRate / 100)
+    .filter(int => int >= 1)  // bcoz bank change rule and interest less than 1 is not accountable.
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = `${calcInterest}€`;
 
 }
-calcDisplaySummary(account1.movements);
 
-const createUserName = function(accounts){
-  accounts.forEach(function(acc){
+const createUserName = function (accounts) {
+  accounts.forEach(function (acc) {
     acc.username = acc.owner
-                .toLowerCase()
-                .split(' ')
-                .map(word => word[0]) // map method use
-            // .map(function(word){ return word[0]}) same as above but lengthy
-                .join('');
+      .toLowerCase()
+      .split(' ')
+      .map(word => word[0]) // map method use
+      // .map(function(word){ return word[0]}) same as above but lengthy
+      .join('');
   })
 }
 createUserName(accounts);
+
+let currentAccount;
+
+btnLogin.addEventListener('click', function (e) {
+
+  e.preventDefault();
+
+  currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
+  if (currentAccount.pin === Number(inputLoginPin.value)) {
+    // clearinh input field
+    inputLoginPin.value = inputLoginUsername.value = '';
+    // removing focus from input
+    inputLoginPin.blur();
+
+    containerApp.style.opacity = 100;
+    // changing heading
+    labelWelcome.textContent = `Welcome Back, ${currentAccount.owner.split(' ')[0]}`
+
+    //calling function
+    displayMovements(currentAccount.movements);
+
+    calcDisplayBalance(currentAccount.movements);
+
+    calcDisplaySummary(currentAccount)
+  }
+
+})
 // console.log(accounts);
 
 /////////////////////////////////////////////////
@@ -268,11 +305,11 @@ console.log(withdrawal);*/
 /////////////// reduce method ///////////////////////////////
 
 // acc = accumulator -> SNOWBALL
-const balance = movements.reduce( (acc, move) => acc + move , 0)
+const balance = movements.reduce((acc, move) => acc + move, 0)
 // console.log(balance);
 
-const largest = movements.reduce(function (acc, move){
-  if(acc > move) return acc;
+const largest = movements.reduce(function (acc, move) {
+  if (acc > move) return acc;
   else return move;
 }, movements[0]);
 // console.log(largest);
@@ -296,17 +333,17 @@ TEST DATA 2: [16, 6, 10, 5, 6, 1, 4]
 GOOD LUCK 😀
 */
 
-const calcAverageHumanAge = function(dogs){
+const calcAverageHumanAge = function (dogs) {
 
   const dogToHuman = dogs.map(dog => dog <= 2 ? 2 * dog : 16 + dog * 4)
   console.log(dogToHuman);
-  const filterd  = dogToHuman.filter(dog => dog >=18)
+  const filterd = dogToHuman.filter(dog => dog >= 18)
   console.log(filterd);
   // const adult =  filterd.reduce( (acculator , dog , i , arr)=> acculator + dog / arr.length, 0);
   // console.log(adult);
-  const adult =  filterd.reduce(function(acculator , dog , i , arr){
-     return acculator + dog / arr.length
-},0)
+  const adult = filterd.reduce(function (acculator, dog, i, arr) {
+    return acculator + dog / arr.length
+  }, 0)
   console.log(dogToHuman);
 }
 // calcAverageHumanAge([5, 2, 4, 1, 15, 8, 3]);
@@ -315,8 +352,8 @@ const calcAverageHumanAge = function(dogs){
 ///// Challenge 3 //////////
 // using chaining method
 
-const calcAverageHuman = function(dogs){
-  const dogToHuman = dogs.map(dog => dog <= 2 ? 2 * dog : 16 + dog * 4).filter(dog => dog >=18).reduce( (acculator , dog , i , arr)=> acculator + dog / arr.length, 0);
+const calcAverageHuman = function (dogs) {
+  const dogToHuman = dogs.map(dog => dog <= 2 ? 2 * dog : 16 + dog * 4).filter(dog => dog >= 18).reduce((acculator, dog, i, arr) => acculator + dog / arr.length, 0);
   console.log(dogToHuman);
 
 }
