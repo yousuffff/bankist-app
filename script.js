@@ -44,8 +44,14 @@ const account6 = {
   interestRate: 1,
   pin: 9211,
 };
+const account7 = {
+  owner: 'Uzair Ahmad',
+  movements: [4300, -10000, -700,-300, -20, 50, 400, -460],
+  interestRate: 1,
+  pin: 9211,
+};
 
-const accounts = [account1, account2, account3, account4, account5, account6,];
+const accounts = [account1, account2, account3, account4, account5, account6, account7];
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -73,6 +79,17 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
+const updateUI = function(acc){
+  displayMovements(acc.movements);
+
+  calcDisplayBalance(acc);
+
+  calcDisplaySummary(acc)
+
+}
+
+// const currentTime = new Date();
+// console.log(currentTime);
 
 const displayMovements = function (movements) {
   containerMovements.innerHTML = '';
@@ -91,8 +108,8 @@ const displayMovements = function (movements) {
 }
 
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce(function (acc, move) {
+const calcDisplayBalance = function (acc) {
+  acc.balance = acc.movements.reduce(function (acc, move) {
     return acc + move
   }, 0 // zero is a initial value of acculator
   );
@@ -146,13 +163,44 @@ btnLogin.addEventListener('click', function (e) {
     labelWelcome.textContent = `Welcome Back, ${currentAccount.owner.split(' ')[0]}`
 
     //calling function
-    displayMovements(currentAccount.movements);
-
-    calcDisplayBalance(currentAccount.movements);
-
-    calcDisplaySummary(currentAccount)
+    updateUI(currentAccount);
   }
 
+})
+btnTransfer.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const amount = Number(inputTransferAmount.value);
+  const receiver =accounts.find(acc => acc.username === inputTransferTo.value);
+  console.log(receiver , amount);
+
+  inputTransferAmount.value = inputTransferTo.value = '';
+
+  if(amount > 0 &&
+    receiver &&
+    currentAccount.balance >= amount &&
+    receiver.username !== currentAccount.username){
+      
+      currentAccount.movements.push(-amount);
+      receiver.movements.push(amount);
+
+      updateUI(currentAccount);
+    }
+  
+})
+btnLoan.addEventListener('click', function(e){
+  e.preventDefault();
+
+  const loanAmount = inputLoanAmount.value;
+  console.log(loanAmount);
+  inputLoanAmount.value ='';
+  if(loanAmount < 10001){
+    setTimeout(()=>{
+    currentAccount.movements.push(loanAmount);
+    updateUI(currentAccount)
+    },5000)
+    
+  }
 })
 // console.log(accounts);
 
