@@ -594,9 +594,38 @@ const dogs = [
   { weight: 32, curFood: 340, owners: ['Michael'] }
 ];
 console.log(dogs);
-
+//1
 dogs.forEach(function(dog){
-  
+ dog.recomanded = Math.trunc(dog.weight ** 0.75 * 28);
 })
 
+//2
+const sarah = dogs.find(dog => dog.owners.includes('Sarah'))
+console.log(sarah);
 
+//3
+const ownersEatTooMuch = dogs.filter(dog => dog.recomanded > dog.curFood).flatMap(dog => dog.owners);
+console.log(ownersEatTooMuch);
+const ownersEatTooLittle = dogs.filter(dog => dog.recomanded < dog.curFood).flatMap(dog => dog.owners);
+console.log(ownersEatTooLittle);
+
+//4
+//"Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+console.log(`${ownersEatTooMuch.join(' and ')}'s dog eat too much`);
+console.log(`${ownersEatTooLittle.join(' and ')}'s dog eat too little`);
+
+//5
+console.log(dogs.some(dog  => dog.curFood === dog.recomanded));
+
+//6
+const checkEatingOkey = dog => dog.curFood > dog.recomanded * 0.9 && dog.curFood < dog.recomanded * 1.1;
+console.log(dogs.some(checkEatingOkey));
+
+//7
+
+const dogEatingOkay = dogs.filter(checkEatingOkey);
+console.log(dogEatingOkay);
+
+//8
+const dogSorted = dogs.slice().sort((a , b) => a.recomanded - b.recomanded);
+console.log(dogSorted);
