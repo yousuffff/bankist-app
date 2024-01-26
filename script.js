@@ -102,7 +102,7 @@ const displayMovements = function (movements, sort = false) {
     const html = `<div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
     <div class="movements__date">Just Now</div>
-    <div class="movements__value">${mov} €</div>
+    <div class="movements__value">${mov.toFixed(2)} €</div>
   </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   })
@@ -115,22 +115,22 @@ const calcDisplayBalance = function (acc) {
   // zero is a initial value of acculator
 
   // console.log(balance);
-  labelBalance.textContent = `${acc.balance} €`;
+  labelBalance.textContent = `${acc.balance.toFixed(2)} €`;
 
 }
 
 const calcDisplaySummary = function (acc) {
   const income = acc.movements.filter(move => move > 0).reduce((acc, move) => acc + move, 0);
-  labelSumIn.textContent = `${income}€`;
+  labelSumIn.textContent = `${income.toFixed(2)}€`;
 
   const outcome = acc.movements.filter(move => move < 0).reduce((acc, move) => acc + move, 0);
-  labelSumOut.textContent = `${Math.abs(outcome)}€`;
+  labelSumOut.textContent = `${Math.abs(outcome).toFixed(2)}€`;
 
   const calcInterest = acc.movements.filter(move => move > 0)
     .map(deposit => deposit * acc.interestRate / 100)
     .filter(int => int >= 1)  // bcoz bank change rule and interest less than 1 is not accountable.
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${calcInterest}€`;
+  labelSumInterest.textContent = `${calcInterest.toFixed(2)}€`;
 
 }
 
@@ -153,7 +153,8 @@ btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
 
   currentAccount = accounts.find(acc => acc.username === inputLoginUsername.value);
-  if (currentAccount.pin === Number(inputLoginPin.value)) {
+  if (currentAccount.pin === +(inputLoginPin.value)) // we can use plus operator instead Number
+   {
     // clearinh input field
     inputLoginPin.value = inputLoginUsername.value = '';
     // removing focus from input
@@ -174,7 +175,7 @@ btnLogin.addEventListener('click', function (e) {
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const amount = Number(inputTransferAmount.value);
+  const amount = +(inputTransferAmount.value); // we can use plus operator instead Number
   const receiver = accounts.find(acc => acc.username === inputTransferTo.value);
   console.log(receiver, amount); // find method use here 
 
@@ -197,7 +198,7 @@ btnTransfer.addEventListener('click', function (e) {
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
-  const loanAmount = Number(inputLoanAmount.value);
+  const loanAmount = +(inputLoanAmount.value); // we can use plus operator instead Number
   console.log(loanAmount);
   inputLoanAmount.value = '';
   if (loanAmount > 0 &&
@@ -213,7 +214,7 @@ btnLoan.addEventListener('click', function (e) {
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   const username = inputCloseUsername.value;
-  const passPin = Number(inputClosePin.value);
+  const passPin = +(inputClosePin.value); // we can use plus operator instead Number
 
   inputCloseUsername.value = inputClosePin.value = '';
   if (currentAccount.username === username &&
@@ -587,45 +588,53 @@ const dogs = [
 
 GOOD LUCK 😀
 */
-const dogs = [
-  { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
-  { weight: 8, curFood: 200, owners: ['Matilda'] },
-  { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
-  { weight: 32, curFood: 340, owners: ['Michael'] }
-];
-console.log(dogs);
-//1
-dogs.forEach(function(dog){
- dog.recomanded = Math.trunc(dog.weight ** 0.75 * 28);
+// const dogs = [
+//   { weight: 22, curFood: 250, owners: ['Alice', 'Bob'] },
+//   { weight: 8, curFood: 200, owners: ['Matilda'] },
+//   { weight: 13, curFood: 275, owners: ['Sarah', 'John'] },
+//   { weight: 32, curFood: 340, owners: ['Michael'] }
+// ];
+// console.log(dogs);
+// //1
+// dogs.forEach(function(dog){
+//  dog.recomanded = Math.trunc(dog.weight ** 0.75 * 28);
+// })
+
+// //2
+// const sarah = dogs.find(dog => dog.owners.includes('Sarah'))
+// console.log(sarah);
+
+// //3
+// const ownersEatTooMuch = dogs.filter(dog => dog.recomanded > dog.curFood).flatMap(dog => dog.owners);
+// console.log(ownersEatTooMuch);
+// const ownersEatTooLittle = dogs.filter(dog => dog.recomanded < dog.curFood).flatMap(dog => dog.owners);
+// console.log(ownersEatTooLittle);
+
+// //4
+// //"Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
+// console.log(`${ownersEatTooMuch.join(' and ')}'s dog eat too much`);
+// console.log(`${ownersEatTooLittle.join(' and ')}'s dog eat too little`);
+
+// //5
+// console.log(dogs.some(dog  => dog.curFood === dog.recomanded));
+
+// //6
+// const checkEatingOkey = dog => dog.curFood > dog.recomanded * 0.9 && dog.curFood < dog.recomanded * 1.1;
+// console.log(dogs.some(checkEatingOkey));
+
+// //7
+
+// const dogEatingOkay = dogs.filter(checkEatingOkey);
+// console.log(dogEatingOkay);
+
+// //8
+// const dogSorted = dogs.slice().sort((a , b) => a.recomanded - b.recomanded);
+// console.log(dogSorted);
+
+labelBalance.addEventListener('click', function(){
+  const move = document.querySelectorAll('.movements__row');
+  move.forEach(function(row , i){
+    if(i % 2 === 1) row.style.backgroundColor = 'red';
+    if(i % 2 === 0) row.style.backgroundColor = 'black'
+  })
 })
-
-//2
-const sarah = dogs.find(dog => dog.owners.includes('Sarah'))
-console.log(sarah);
-
-//3
-const ownersEatTooMuch = dogs.filter(dog => dog.recomanded > dog.curFood).flatMap(dog => dog.owners);
-console.log(ownersEatTooMuch);
-const ownersEatTooLittle = dogs.filter(dog => dog.recomanded < dog.curFood).flatMap(dog => dog.owners);
-console.log(ownersEatTooLittle);
-
-//4
-//"Matilda and Alice and Bob's dogs eat too much!" and "Sarah and John and Michael's dogs eat too little!"
-console.log(`${ownersEatTooMuch.join(' and ')}'s dog eat too much`);
-console.log(`${ownersEatTooLittle.join(' and ')}'s dog eat too little`);
-
-//5
-console.log(dogs.some(dog  => dog.curFood === dog.recomanded));
-
-//6
-const checkEatingOkey = dog => dog.curFood > dog.recomanded * 0.9 && dog.curFood < dog.recomanded * 1.1;
-console.log(dogs.some(checkEatingOkey));
-
-//7
-
-const dogEatingOkay = dogs.filter(checkEatingOkey);
-console.log(dogEatingOkay);
-
-//8
-const dogSorted = dogs.slice().sort((a , b) => a.recomanded - b.recomanded);
-console.log(dogSorted);
