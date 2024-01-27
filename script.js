@@ -10,6 +10,18 @@ const account1 = {
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
+  movementsDates: [
+    '2022-03-18T21:31:17.178Z',
+    '2022-04-23T07:42:02.383Z',
+    '2023-06-28T09:15:04.904Z',
+    '2023-08-01T10:17:24.185Z',
+    '2023-09-08T14:11:59.604Z',
+    '2023-10-27T17:01:17.194Z',
+    '2024-01-24T23:36:17.929Z',
+    '2024-01-27T10:51:36.790Z',
+  ],
+  currency: 'EUR',
+  locale: 'pt-PT', // de-DE
 };
 
 const account2 = {
@@ -17,6 +29,18 @@ const account2 = {
   movements: [5000, 3400, -150, -790, -3210, -1000, 8500, -30],
   interestRate: 1.5,
   pin: 2222,
+  movementsDates: [
+    '2022-03-18T21:31:17.178Z',
+    '2022-04-23T07:42:02.383Z',
+    '2023-06-28T09:15:04.904Z',
+    '2023-08-01T10:17:24.185Z',
+    '2023-09-08T14:11:59.604Z',
+    '2023-10-27T17:01:17.194Z',
+    '2024-01-24T23:36:17.929Z',
+    '2024-01-27T10:51:36.790Z',
+  ],
+  currency: 'USD',
+  locale: 'en-US',
 };
 
 const account3 = {
@@ -24,6 +48,18 @@ const account3 = {
   movements: [200, -200, 340, -300, -20, 50, 400, -460],
   interestRate: 0.7,
   pin: 3333,
+  movementsDates: [
+    '2022-03-18T21:31:17.178Z',
+    '2022-04-23T07:42:02.383Z',
+    '2023-06-28T09:15:04.904Z',
+    '2023-08-01T10:17:24.185Z',
+    '2023-09-08T14:11:59.604Z',
+    '2023-10-27T17:01:17.194Z',
+    '2024-01-24T23:36:17.929Z',
+    '2024-01-27T10:51:36.790Z',
+  ],
+  currency: 'USD',
+  locale: 'en-US',
 };
 
 const account4 = {
@@ -31,24 +67,74 @@ const account4 = {
   movements: [430, 1000, 700, 50, 90],
   interestRate: 1,
   pin: 4444,
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    
+  ],
+  currency: 'EUR',
+  locale: 'pt-PT', // de-DE
 };
 const account5 = {
   owner: 'Yousuf Mohd',
   movements: [4300, 10000, -700, 950, 90, -20, 50, 400, -460],
   interestRate: 1,
   pin: 9794,
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+    '2020-05-27T17:01:17.194Z',
+    
+  ],
+  currency: 'INR',
+  locale: 'pt-PT', // de-DE
 };
 const account6 = {
   owner: 'Hashim Haidar',
   movements: [4300, -10000, -700, 950, 90, -20, 50, 400, -460],
   interestRate: 1,
   pin: 9211,
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+    '2020-07-11T23:36:17.929Z',
+    
+  ],
+  currency: 'INR',
+  locale: 'pt-PT', // de-DE
 };
 const account7 = {
   owner: 'Uzair Ahmad',
   movements: [4300, -10000, -700, -300, -20, 50, 400, -460],
   interestRate: 1,
   pin: 9211,
+  movementsDates: [
+    '2019-11-18T21:31:17.178Z',
+    '2019-12-23T07:42:02.383Z',
+    '2020-01-28T09:15:04.904Z',
+    '2020-04-01T10:17:24.185Z',
+    '2020-05-08T14:11:59.604Z',
+    '2020-05-27T17:01:17.194Z',
+    '2020-07-11T23:36:17.929Z',
+    '2020-07-12T10:51:36.790Z',
+  ],
+  currency: 'INR',
+  locale: 'pt-PT', // de-DE
 };
 
 const accounts = [account1, account2, account3, account4, account5, account6, account7];
@@ -80,7 +166,7 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const updateUI = function (acc) {
-  displayMovements(acc.movements);
+  displayMovements(acc);
 
   calcDisplayBalance(acc);
 
@@ -88,20 +174,47 @@ const updateUI = function (acc) {
 
 }
 
+
+const formatDate = function(date){
+  const calcDayPassed = (date1 , date2) => Math.round(Math.abs( date2 - date1) / (1000 * 60 * 60 * 24));
+  const nowDate = calcDayPassed(new Date(), date);
+  console.log(nowDate);
+  if(nowDate === 0) return 'Today'
+  if(nowDate === 1) return 'Yesterday';
+  if(nowDate < 7) return `${nowDate} days ago`
+  const year = date.getFullYear();
+  const month = `${date.getMonth() + 1}`.padStart(2 , '0');
+  const day = `${date.getDate()}`.padStart(2 , '0');
+  return `${day}/${month}/${year}`;
+
+}
+
+
 // const currentTime = new Date();
 // console.log(currentTime);
 
-const displayMovements = function (movements, sort = false) {
+const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
-  const movs = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movs = sort ? acc.movements.slice().sort((a, b) => a - b) : acc.movements;
+  
 
   movs.forEach(function (mov, i) {
+    
+    const date = new Date(acc.movementsDates[i]);
+    // const year = date.getFullYear();
+    // const month = `${date.getMonth() + 1}`.padStart(2 , '0');
+    // const day = `${date.getDate()}`.padStart(2 , '0');
+    // const hour = `${date.getHours()}`.padStart(2 , '0');
+    // const minute = `${date.getMinutes()}`.padStart(2 , '0');
+    // console.log(year, month, day, hour, minute);
+    const displayDate = formatDate(date);
+
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `<div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
-    <div class="movements__date">Just Now</div>
+    <div class="movements__date">${displayDate}</div>
     <div class="movements__value">${mov.toFixed(2)} €</div>
   </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -163,6 +276,14 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     // changing heading
     labelWelcome.textContent = `Welcome Back, ${currentAccount.owner.split(' ')[0]}`
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = `${date.getMonth() + 1}`.padStart(2 , '0');
+    const day = `${date.getDate()}`.padStart(2 , '0');
+    const hour = `${date.getHours()}`.padStart(2 , '0');
+    const minute = `${date.getMinutes()}`.padStart(2 , '0');
+    // console.log(year, month, day, hour, minute);
+    labelDate.textContent = `${day}/${month}/${year} ${hour}:${minute}`;
 
     //calling function
     updateUI(currentAccount);
@@ -187,14 +308,18 @@ btnTransfer.addEventListener('click', function (e) {
     receiver.username !== currentAccount.username) {
 
     currentAccount.movements.push(-amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
     receiver.movements.push(amount);
+    receiver.movementsDates.push(new Date().toISOString());
 
     updateUI(currentAccount);
 
     // calcDisplayBalance(currentAccount)
   }
 
+
 })
+
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
 
@@ -205,6 +330,7 @@ btnLoan.addEventListener('click', function (e) {
     currentAccount.movements.some(move => move > loanAmount / 10)) {
     setTimeout(() => {
       currentAccount.movements.push(loanAmount);
+      currentAccount.movementsDates.push(new Date().toISOString());
       updateUI(currentAccount)
     }, 5000)
 
