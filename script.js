@@ -96,7 +96,7 @@ const account5 = {
     
   ],
   currency: 'INR',
-  locale: 'pt-PT', // de-DE
+  locale: 'en-US', // de-DE
 };
 const account6 = {
   owner: 'Hashim Haidar',
@@ -116,7 +116,7 @@ const account6 = {
     
   ],
   currency: 'INR',
-  locale: 'pt-PT', // de-DE
+  locale: 'en-US', // de-DE
 };
 const account7 = {
   owner: 'Uzair Ahmad',
@@ -134,7 +134,7 @@ const account7 = {
     '2020-07-12T10:51:36.790Z',
   ],
   currency: 'INR',
-  locale: 'pt-PT', // de-DE
+  locale: 'en-US', // de-DE
 };
 
 const accounts = [account1, account2, account3, account4, account5, account6, account7];
@@ -174,19 +174,32 @@ const updateUI = function (acc) {
 
 }
 
+const formatCur = function(value , locale , currency){
+  const option = {
+    style : 'currency',
+    currency : currency
+  }
+  return new Intl.NumberFormat(locale , option).format(value)
+}
 
-const formatDate = function(date){
+const formatDate = function(date, locale){
   const calcDayPassed = (date1 , date2) => Math.round(Math.abs( date2 - date1) / (1000 * 60 * 60 * 24));
   const nowDate = calcDayPassed(new Date(), date);
-  console.log(nowDate);
+  // console.log(nowDate);
   if(nowDate === 0) return 'Today'
   if(nowDate === 1) return 'Yesterday';
   if(nowDate < 7) return `${nowDate} days ago`
-  const year = date.getFullYear();
-  const month = `${date.getMonth() + 1}`.padStart(2 , '0');
-  const day = `${date.getDate()}`.padStart(2 , '0');
-  return `${day}/${month}/${year}`;
-
+  // const year = date.getFullYear();
+  // const month = `${date.getMonth() + 1}`.padStart(2 , '0');
+  // const day = `${date.getDate()}`.padStart(2 , '0');
+  // return `${day}/${month}/${year}`;
+  // console.log(locale);
+  const options ={
+    day: 'numeric',
+    month: 'numeric',
+    year: 'numeric',
+  }
+  return new Intl.DateTimeFormat(locale, options).format(date); 
 }
 
 
@@ -208,14 +221,14 @@ const displayMovements = function (acc, sort = false) {
     // const hour = `${date.getHours()}`.padStart(2 , '0');
     // const minute = `${date.getMinutes()}`.padStart(2 , '0');
     // console.log(year, month, day, hour, minute);
-    const displayDate = formatDate(date);
+    const displayDate = formatDate(date , acc.locale);
 
     const type = mov > 0 ? 'deposit' : 'withdrawal';
 
     const html = `<div class="movements__row">
     <div class="movements__type movements__type--${type}">${i + 1} ${type}</div>
     <div class="movements__date">${displayDate}</div>
-    <div class="movements__value">${mov.toFixed(2)} €</div>
+    <div class="movements__value">${formatCur(mov ,acc.locale, acc.currency)}</div>
   </div>`;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   })
@@ -228,22 +241,22 @@ const calcDisplayBalance = function (acc) {
   // zero is a initial value of acculator
 
   // console.log(balance);
-  labelBalance.textContent = `${acc.balance.toFixed(2)} €`;
+  labelBalance.textContent = `${formatCur(acc.balance ,acc.locale, acc.currency)}`;
 
 }
 
 const calcDisplaySummary = function (acc) {
   const income = acc.movements.filter(move => move > 0).reduce((acc, move) => acc + move, 0);
-  labelSumIn.textContent = `${income.toFixed(2)}€`;
+  labelSumIn.textContent = `${formatCur(income ,acc.locale, acc.currency)}`;
 
   const outcome = acc.movements.filter(move => move < 0).reduce((acc, move) => acc + move, 0);
-  labelSumOut.textContent = `${Math.abs(outcome).toFixed(2)}€`;
+  labelSumOut.textContent = `${formatCur(Math.abs(outcome) ,acc.locale, acc.currency)}`;
 
   const calcInterest = acc.movements.filter(move => move > 0)
     .map(deposit => deposit * acc.interestRate / 100)
     .filter(int => int >= 1)  // bcoz bank change rule and interest less than 1 is not accountable.
     .reduce((acc, int) => acc + int, 0);
-  labelSumInterest.textContent = `${calcInterest.toFixed(2)}€`;
+  labelSumInterest.textContent = `${formatCur(calcInterest ,acc.locale, acc.currency)}`;
 
 }
 
@@ -276,14 +289,25 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     // changing heading
     labelWelcome.textContent = `Welcome Back, ${currentAccount.owner.split(' ')[0]}`
-    const date = new Date();
-    const year = date.getFullYear();
-    const month = `${date.getMonth() + 1}`.padStart(2 , '0');
-    const day = `${date.getDate()}`.padStart(2 , '0');
-    const hour = `${date.getHours()}`.padStart(2 , '0');
-    const minute = `${date.getMinutes()}`.padStart(2 , '0');
-    // console.log(year, month, day, hour, minute);
-    labelDate.textContent = `${day}/${month}/${year} ${hour}:${minute}`;
+    // const date = new Date();
+    // const year = date.getFullYear();
+    // const month = `${date.getMonth() + 1}`.padStart(2 , '0');
+    // const day = `${date.getDate()}`.padStart(2 , '0');
+    // const hour = `${date.getHours()}`.padStart(2 , '0');
+    // const minute = `${date.getMinutes()}`.padStart(2 , '0');
+    // // console.log(year, month, day, hour, minute);
+    // labelDate.textContent = `${day}/${month}/${year} ${hour}:${minute}`;
+    let locale = currentAccount.locale;
+      // console.log(locale);
+      const now = new Date();
+      const options ={
+        hour : 'numeric',
+        minute: 'numeric',
+        day: 'numeric',
+        month: 'numeric',
+        year: 'numeric',
+      }
+      labelDate.textContent = new Intl.DateTimeFormat(locale, options).format(now); 
 
     //calling function
     updateUI(currentAccount);
