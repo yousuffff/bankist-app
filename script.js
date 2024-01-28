@@ -272,7 +272,7 @@ const createUserName = function (accounts) {
 }
 createUserName(accounts);
 
-let currentAccount;
+let currentAccount, timer;
 
 btnLogin.addEventListener('click', function (e) {
 
@@ -311,6 +311,10 @@ btnLogin.addEventListener('click', function (e) {
 
     //calling function
     updateUI(currentAccount);
+
+     // reset timer
+     if(timer)clearTimeout(timer);
+     timer = startLogoutTime()
   }
   else {
     alert('Please enter Valid Credentials');
@@ -338,6 +342,9 @@ btnTransfer.addEventListener('click', function (e) {
 
     updateUI(currentAccount);
 
+     // reset timer
+     clearTimeout(timer);
+     timer = startLogoutTime()
     // calcDisplayBalance(currentAccount)
   }
 
@@ -356,6 +363,9 @@ btnLoan.addEventListener('click', function (e) {
       currentAccount.movements.push(loanAmount);
       currentAccount.movementsDates.push(new Date().toISOString());
       updateUI(currentAccount)
+       // reset timer
+     clearTimeout(timer);
+     timer = startLogoutTime()
     }, 5000)
 
   }
@@ -384,6 +394,24 @@ btnSort.addEventListener('click', function (e) {
   displayMovements(currentAccount.movements, !sorted);
   sorted = !sorted;
 })
+const startLogoutTime = function(){
+  const tick = function(){
+    const min = String(Math.trunc(time / 60)).padStart(2, '0');
+    const sec = String(time % 60).padStart(2, '0');
+    labelTimer.textContent = `${min}:${sec}`;
+    if(time === 0){
+      clearInterval(timer)
+      labelWelcome.textContent = `Log in to get started`;
+      containerApp.style.opacity = 0;
+    }
+    time--;
+  }
+  let time = 120;
+
+  const timer = setInterval(tick, 1000)
+  return timer;
+  
+}
 // console.log(accounts);
 
 /////////////////////////////////////////////////
